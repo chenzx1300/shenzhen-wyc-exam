@@ -150,6 +150,21 @@ CSS 集中在 `<style>` 顶部，颜色变量在 `:root`（行 9–20）。修�
 
 如需恢复"选完即判"的老行为：把 `onAnswerChange` 中那段"不再自动核对"的注释恢复为原来的 `STATE.checked[q.id] = true` 即可。
 
+### 移动端适配
+
+三层断点（CSS 行号附近 `index.html`）：
+
+| 断点 | 行为 |
+|---|---|
+| ≤ 900px（平板） | 答题卡改为右侧抽屉（`transform: translateX(100%)` 隐藏），头部加 `📌 答题卡` 切换按钮；答题卡网格 5 列 → 8 列 |
+| ≤ 640px（手机） | 头部 h1 缩到 15px；选项按钮最小 56px、触摸目标 ≥ 44px；底部 `上一题/标记/下一题` 改为 sticky 操作栏并加 `env(safe-area-inset-bottom)`；字号 15–16px；结果页统计 5 列 → 2 列 |
+| ≤ 380px（小屏） | h1 缩到 14px；答题卡 5 列；导航按钮缩小 padding |
+
+JS 配套：
+- `toggleSidebar()` / `openSidebar()` / `closeSidebar()`（行 6493–6531）— 抽屉显隐与背景遮罩
+- `renderPalette` 中点击答题卡项后自动收起（仅 `window.innerWidth <= 900`）
+- `switchMode` 切模式时调用 `closeSidebar()`
+
 ### 已知约束 / 可改进点
 
 - **无持久化**：刷新页面即丢失所有答题状态。如需保存进度，需在 `startPractice` / `startExam` / `onAnswerChange` 处接入 `localStorage`
