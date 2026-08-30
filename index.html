@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>深圳市网约车驾驶员从业资格考试模拟系统</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -555,6 +555,184 @@
     color: var(--muted);
     font-size: 12px;
   }
+
+  /* ================= Mobile-first enhancements ================= */
+
+  /* Palette toggle button (hidden on desktop, shown via media query) */
+  .palette-toggle {
+    display: none;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    align-items: center;
+    gap: 4px;
+  }
+  .palette-toggle:active { background: var(--primary-dark); }
+
+  /* 仅在考试/练习屏可见（exam-screen 没有 .hidden 时）；设置/结果/回顾屏隐藏 */
+  #exam-screen.hidden .palette-toggle { display: none !important; }
+
+  .exam-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Backdrop for mobile sidebar overlay */
+  .sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    z-index: 999;
+  }
+  .sidebar-backdrop.show { display: block; }
+
+  /* ---------- Tablet (≤ 900px) ---------- */
+  @media (max-width: 900px) {
+    .container {
+      grid-template-columns: 1fr;
+      padding: 12px;
+      gap: 12px;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      border-radius: 0;
+      margin: 0;
+      padding: 16px;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      box-shadow: -4px 0 12px rgba(0,0,0,0.15);
+    }
+    .sidebar.show { transform: translateX(0); }
+    .palette-toggle { display: inline-flex; }
+    .main-panel { padding: 18px; }
+    .palette-grid { grid-template-columns: repeat(8, 1fr); gap: 8px; }
+    .palette-item { font-size: 14px; }
+  }
+
+  /* ---------- Phone (≤ 640px) ---------- */
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+
+    .header { padding: 10px 14px; }
+    .header h1 { font-size: 15px; letter-spacing: 0.2px; }
+    .header .subtitle { font-size: 11px; }
+    .mode-switch { width: 100%; padding: 3px; }
+    .mode-switch button { padding: 6px 10px; font-size: 13px; }
+
+    .container { padding: 8px; gap: 10px; }
+    .main-panel { padding: 14px; border-radius: 10px; }
+
+    /* Larger touch targets */
+    .option {
+      padding: 14px 14px;
+      min-height: 56px;
+      font-size: 15px;
+      gap: 10px;
+    }
+    .option input { width: 20px; height: 20px; margin-top: 2px; }
+    .option-label { min-width: 20px; font-size: 15px; }
+
+    .question-text { font-size: 16px; line-height: 1.65; }
+
+    /* Sticky bottom action bar */
+    .nav-buttons {
+      position: sticky;
+      bottom: 0;
+      margin: 16px -14px -14px;
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+      gap: 8px;
+      flex-wrap: nowrap;
+    }
+    .nav-buttons .btn {
+      flex: 1;
+      min-height: 44px;
+      padding: 12px 10px;
+      font-size: 15px;
+    }
+    .flag-btn {
+      min-height: 44px;
+      padding: 10px 14px;
+      font-size: 14px;
+      margin-left: 0;
+      flex: 0 0 auto;
+    }
+
+    /* Exam bar stacks on phone */
+    .exam-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .exam-bar-actions {
+      justify-content: space-between;
+    }
+    .progress-info { font-size: 13px; gap: 8px; }
+    .progress-text { font-size: 15px; }
+    .timer { font-size: 17px; min-width: 86px; padding: 6px 12px; }
+
+    /* Setup form on phone */
+    .setup h2 { font-size: 18px; }
+    .form-group { padding: 12px; }
+    .checkbox-group, .radio-group { gap: 8px; }
+    .checkbox-group label, .radio-group label {
+      padding: 10px 12px;
+      font-size: 14px;
+      min-height: 44px;
+    }
+    .start-btn { padding: 14px 20px; font-size: 16px; min-height: 48px; }
+
+    /* Option ::after ✓/✗ don't overflow */
+    .option.correct::after, .option.wrong::after {
+      font-size: 16px;
+      margin-left: 6px;
+    }
+
+    /* Feedback more compact */
+    .feedback { padding: 12px; font-size: 13px; }
+
+    /* Palette drawer items bigger for thumb */
+    .palette-grid { grid-template-columns: repeat(6, 1fr); gap: 8px; }
+    .palette-item { font-size: 15px; min-height: 40px; }
+    .palette h3 { font-size: 15px; }
+
+    /* Result screen */
+    .result-score { font-size: 48px; }
+    .result-status { font-size: 18px; padding: 6px 16px; }
+    .result-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-card { padding: 12px; }
+    .stat-value { font-size: 20px; }
+    .result-actions .btn { min-height: 44px; padding: 12px 16px; font-size: 15px; }
+
+    /* Review screen */
+    .review-question { padding: 12px; }
+
+    /* Footer */
+    .footer { padding: 16px 12px; font-size: 11px; }
+  }
+
+  /* ---------- Small phone (≤ 380px) ---------- */
+  @media (max-width: 380px) {
+    .header h1 { font-size: 14px; }
+    .palette-grid { grid-template-columns: repeat(5, 1fr); }
+    .checkbox-group label, .radio-group label { font-size: 13px; padding: 8px 10px; }
+    .nav-buttons .btn { font-size: 14px; padding: 10px 6px; }
+  }
 </style>
 </head>
 <body>
@@ -652,7 +830,10 @@
           <span class="progress-text" id="progress-text">第 1 题 / 共 0 题</span>
           <span id="mode-label" style="color:var(--muted);font-size:14px;"></span>
         </div>
-        <div class="timer" id="timer" style="display:none;">--:--</div>
+        <div class="exam-bar-actions">
+          <button type="button" class="palette-toggle" id="palette-toggle" onclick="toggleSidebar()" aria-label="打开答题卡">📌 答题卡</button>
+          <div class="timer" id="timer" style="display:none;">--:--</div>
+        </div>
       </div>
 
       <div class="practice-stats" id="practice-stats"></div>
@@ -6091,6 +6272,8 @@ function switchMode(mode) {
     renderReview();
     $('#sidebar-stats').style.display = 'none';
   }
+  // 切模式时收起移动端答题卡抽屉
+  if (typeof closeSidebar === 'function') closeSidebar();
 }
 
 /* ==========================================================
@@ -6309,9 +6492,51 @@ function renderPalette() {
       STATE.currentIdx = idx;
       renderQuestion();
       renderPalette();
+      // 移动端：点击答题卡项后自动收起侧栏
+      if (window.innerWidth <= 900) closeSidebar();
     };
     grid.appendChild(div);
   });
+}
+
+/* ==========================================================
+   移动端侧栏（答题卡）抽屉控制
+   ========================================================== */
+function ensureBackdrop() {
+  let bd = $('.sidebar-backdrop');
+  if (!bd) {
+    bd = document.createElement('div');
+    bd.className = 'sidebar-backdrop';
+    bd.onclick = closeSidebar;
+    document.body.appendChild(bd);
+  }
+  return bd;
+}
+
+function openSidebar() {
+  const sb = $('.sidebar');
+  if (!sb) return;
+  sb.classList.add('show');
+  ensureBackdrop().classList.add('show');
+  const btn = $('#palette-toggle');
+  if (btn) btn.setAttribute('aria-label', '关闭答题卡');
+}
+
+function closeSidebar() {
+  const sb = $('.sidebar');
+  if (!sb) return;
+  sb.classList.remove('show');
+  const bd = $('.sidebar-backdrop');
+  if (bd) bd.classList.remove('show');
+  const btn = $('#palette-toggle');
+  if (btn) btn.setAttribute('aria-label', '打开答题卡');
+}
+
+function toggleSidebar() {
+  const sb = $('.sidebar');
+  if (!sb) return;
+  if (sb.classList.contains('show')) closeSidebar();
+  else openSidebar();
 }
 
 /* ==========================================================
